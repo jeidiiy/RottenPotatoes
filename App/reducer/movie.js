@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   moreLoading: false,
   movies: [],
+  movieId: 1,
   page: 1,
   getMovieLoading: false,
   getMovieDone: false,
@@ -20,7 +21,7 @@ export const GET_MOVIE_MORE_FAILURE = 'GET_MOVIE_MORE_FAILURE';
 
 const movieReducer = handleActions(
   {
-    [GET_MOVIE_REQUEST]: (state, dispatch) => {
+    [GET_MOVIE_REQUEST]: state => {
       console.log('GET_MOVIE_REQUEST');
       return {
         ...state,
