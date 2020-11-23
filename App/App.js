@@ -1,29 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { Provider } from 'react-redux';
-import { StyleSheet, Text, View } from 'react-native';
+import Constants from 'expo-constants';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Provider, useSelector } from 'react-redux';
+import { StyleSheet, ScrollView } from 'react-native';
+import axios from 'axios';
 import initStore from './store';
+import Movie from './Movie';
+import Main from './Main';
 
 const store = initStore();
 
-const App = () => {
+function App() {
   return (
     <Provider store={store}>
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <StatusBar style="auto" />
-      </View>
+      <Main />
     </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
 
 export default App;
