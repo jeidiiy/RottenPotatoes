@@ -1,23 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import Constants from 'expo-constants';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Provider, useSelector } from 'react-redux';
-import { StyleSheet, ScrollView } from 'react-native';
-import axios from 'axios';
+import React from 'react';
+import { Provider } from 'react-redux';
 import initStore from './store';
-import Movie from './Movie';
-import Main from './Main';
+import Home from './components/Home';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
 
 const store = initStore();
 
 function App() {
   return (
-    <Provider store={store}>
-      <Main />
+    <Provider store={store} >
+      <NavigationContainer>
+        <Home key="root" />
+      </NavigationContainer>
     </Provider>
   );
 }
-
-
 
 export default App;
