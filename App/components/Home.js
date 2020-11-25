@@ -8,7 +8,6 @@ import MovieProfile from './MovieProfile'
 import { GET_MOVIE_REQUEST, GET_MOVIE_MORE_REQUEST } from '../reducer/movie';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Stack } from 'react-native-router-flux';
 
 const stack = createStackNavigator();
 
@@ -32,7 +31,7 @@ function Home() {
         page
       });
     }
-  }, [movies, page]);
+  }, [movies, page, moreLoading]);
 
   if (loading) {
     return (

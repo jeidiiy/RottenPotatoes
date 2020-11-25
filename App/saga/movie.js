@@ -31,7 +31,7 @@ function *getMovies(action) {
     const movies = yield call(getMovieAPI, action.page);
     yield put({
       type: GET_MOVIE_SUCCESS,
-      movies
+      movies: movies.data.data.movies
     });
   } catch (err) {
     console.log('getMoviesSagaError');
@@ -48,7 +48,7 @@ function *getMovieMores(action) {
     const movies = yield call(getMovieAPI, action.page);
     yield put({
       type: GET_MOVIE_MORE_SUCCESS,
-      movies
+      movies: movies
     });
   } catch (err) {
     console.log('getMoviesSagaError');
