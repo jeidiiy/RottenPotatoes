@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, Dimensions } from 'react-native';
+import { Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Proptypes from 'prop-types';
 import MovieProfile from './MovieProfile';
 
@@ -9,13 +9,16 @@ const imageWidth = dimensions.width / 2;
 
 export default function Movie({ poster, id, title, summary, year }) {
   return (
-    <Image
-      style={styles.poster}
-      source={{ uri: poster }}
-      onClick={() => {
+    <TouchableOpacity
+      onPress={() => {
         navigation.navigate(MovieProfile({ title, summary, year }));
       }}
-    />
+    >
+      <Image
+          style={styles.poster}
+          source={{ uri: poster }}
+      />
+    </TouchableOpacity>
   );
 }
 
