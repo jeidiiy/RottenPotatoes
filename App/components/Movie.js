@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Dimensions } from 'react-native';
-import Protypes from 'prop-types';
+import Proptypes from 'prop-types';
 
 const dimensions = Dimensions.get('window');
 const imageHeight = Math.round((dimensions.width * 13) / 16);
