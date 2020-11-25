@@ -15,9 +15,9 @@ import { GET_MOVIE_REQUEST, GET_MOVIE_MORE_REQUEST } from '../reducer/movie';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-const stack = createStackNavigator();
+const Stack = createStackNavigator();
 
-function Home() {
+function Home({ navigation }) {
   const { loading, movies, movieId, page, moreLoading } = useSelector(
     (state) => state.movie
   );
@@ -78,6 +78,7 @@ function Home() {
             title={movie.title}
             summary={movie.summary}
             year={movie.year}
+            navigation={navigation}
           />
         ))}
         {moreLoading && (
