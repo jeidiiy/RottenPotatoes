@@ -1,7 +1,7 @@
 require('dotenv').config();
 import Sequelize from 'sequelize';
-import Comment from './Comment';
 import Movie from './Movie';
+import Comment from './Comment';
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')['default'][env];
 
