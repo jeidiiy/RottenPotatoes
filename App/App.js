@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import initStore from './store';
 import Home from './components/Home';
+import MovieProfile from './components/MovieProfile';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 // import { Stack } from 'react-native-router-flux';
@@ -16,6 +17,7 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="MovieProfile" component={MovieProfile} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
