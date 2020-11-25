@@ -47,15 +47,16 @@ function *getMovieMores(action) {
 };
 
 function getMovieInfoAPI(id) {
-  return axios(`${serverHost}`);
+  const ytsMovie = axios(`https://yts-proxy.nomadcoders1.now.sh/movie_details.json?movie_id=${id}`);
+  return axios(`${serverHost}/movie/${id}`);
 }
 
 function *getMovieInfo(action) {
   try {
-    const movies = yield call(getMovieInfoAPI, action.movieId);
+    const movie = yield call(getMovieInfoAPI, action.movieId);
     yield put({
       type: GET_MOVIE_INFO_SUCCESS,
-      movies
+      movie
     });
   } catch (err) {
     console.log('getMovieInfoError');
