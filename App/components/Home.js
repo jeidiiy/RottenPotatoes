@@ -64,7 +64,7 @@ function Home() {
             ))}
         {moreLoading && (
           <View>
-            <ActivityIndicator size="large" color="#ec524b" />
+            <ActivityIndicator size="large" color="#ec524b" style={styles.moreLoadingMovie} />
           </View>
         )}
         </ScrollView>
@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   moreLoadingMovie: {
-    padding: "auto",
+    paddingVertical: 100,
+    paddingHorizontal: 100,
   },
 });
 
