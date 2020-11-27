@@ -7,14 +7,14 @@ const dimensions = Dimensions.get('window');
 const imageHeight = Math.round((dimensions.width * 13) / 16);
 const imageWidth = dimensions.width / 2;
 
-export default function Movie({ navigation, title, summary, year, poster }) {
+export default function Movie({ navigation, ...movieInfo }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('MovieProfile', { title, summary, year, poster });
+        navigation.navigate('MovieProfile', movieInfo);
       }}
     >
-      <Image style={styles.poster} source={{ uri: poster }} />
+      <Image style={styles.poster} source={{ uri: movieInfo.poster }} />
     </TouchableOpacity>
   );
 }
