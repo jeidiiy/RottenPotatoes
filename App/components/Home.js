@@ -61,9 +61,7 @@ function Home({ navigation }) {
 
   return (
     <View>
-      <View style={styles.headerTitle}>
-        <Text>은지 영화 앱</Text>
-      </View>
+      <StatusBar barStyle={'default'} />
       <ScrollView
         contentContainerStyle={styles.container}
         onScroll={(e) => {
@@ -72,13 +70,16 @@ function Home({ navigation }) {
       >
         {movies.map((movie) => (
           <Movie
+            navigation={navigation}
             poster={movie.medium_cover_image}
+            largePoster={movie.large_cover_image}
             key={movie.id}
             id={movie.id}
             title={movie.title}
             summary={movie.summary}
             year={movie.year}
-            navigation={navigation}
+            genres={movie.genres}
+            runtime={movie.runtime}
           />
         ))}
         {moreLoading && (
@@ -96,9 +97,6 @@ function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  headerTitle: {
-    backgroundColor: '#ec524b',
-  },
   container: {
     backgroundColor: '#fff',
     paddingTop: Constants.statusBarHeight,
