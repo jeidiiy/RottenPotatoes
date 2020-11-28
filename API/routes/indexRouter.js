@@ -8,15 +8,12 @@ indexRouter.get('/', (req, res) => {
   res.send('ok');
 });
 
-indexRouter.get('/movie/:id', async (req, res, next) => {
-  const movie = await Movie.findOrCreate({
+indexRouter.get('/movie/:id', async (req, res) => {
+  await Movie.findOrCreate({
     where: { movieId: req.params.id },
-    include: [{
-      model: Comment,
-    }],
   });
 
-  return res.json(movie);
+  return res.status(200).send('ok');
 });
 
 
