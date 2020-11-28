@@ -1,29 +1,15 @@
-import { all, call, put, throttle, fork } from "redux-saga/effects";
+import { all, call, put, throttle, fork, takeLatest } from "redux-saga/effects";
 import axios from 'axios';
 import { 
   GET_MOVIE_REQUEST, GET_MOVIE_FAILURE, GET_MOVIE_SUCCESS,
   GET_MOVIE_MORE_REQUEST, GET_MOVIE_MORE_FAILURE, GET_MOVIE_MORE_SUCCESS,
+  GET_MOVIE_INFO_REQUEST, GET_MOVIE_INFO_SUCCESS, GET_MOVIE_INFO_FAILURE,
 } from "../reducer/movie";
+import { serverHost } from '../config';
 
 
 function getMovieAPI(page) {
   return axios.get(`https://yts-proxy.nomadcoders1.now.sh/list_movies.json?limit=15&page=${page}`);
-  // let urls = [];
-  // let result = [];
-  // for (let i = movieId; i < movieId + 10; i++) {
-  //   urls.push(`https://yts-proxy.nomadcoders1.now.sh/movie_details.json?movie_id=${i}`);
-  // }
-  // console.log(urls);
-  // await Promise.all(urls.map((url) => {
-  //   axios
-  //     .get(url)
-  //     .then(res => res.data.data.movie)
-  //     .then(movie => result.push(movie))
-  //     .then(() => console.log(result)); 
-  //   }))
-  //     .then(() => result)
-  //     .then(() => console.log('Promise is done'));
-  // return result;
 };
 
 function *getMovies(action) { 
@@ -60,6 +46,33 @@ function *getMovieMores(action) {
   };
 };
 
+function getMovieInfoAPI(id) {
+  const reqOptions = {
+    method: 'GET',
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    url: `${serverHost}/movie/${id}`,
+  };
+
+  return axios(reqOptions);
+}
+
+function *getMovieInfo(action) {
+  try {
+    const movie = yield call(getMovieInfoAPI, action.movieId);
+    yield put({
+      type: GET_MOVIE_INFO_SUCCESS,
+      movie
+    });
+  } catch (err) {
+    console.log('getMovieInfoError');
+    console.log(err);
+    yield put({
+      type: GET_MOVIE_INFO_FAILURE,
+      error: err.response
+    });
+  };
+}
+
 function* watchGetMovies() {
   yield throttle(3000, GET_MOVIE_REQUEST, getMovies);
 };
@@ -68,9 +81,14 @@ function* watchgetMoreMovies() {
   yield throttle(3000, GET_MOVIE_MORE_REQUEST, getMovieMores);
 };
 
+function* watchGetMovieInfo() {
+  yield takeLatest(GET_MOVIE_INFO_REQUEST, getMovieInfo);
+}
+
 export default function* movieSaga() {
   yield all([
     fork(watchGetMovies),
     fork(watchgetMoreMovies),
+    fork(watchGetMovieInfo),
   ]);
 };

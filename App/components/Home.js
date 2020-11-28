@@ -18,7 +18,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 function Home({ navigation }) {
-  const { loading, movies, movieId, page, moreLoading } = useSelector(
+  const { loading, movies, page, moreLoading } = useSelector(
     (state) => state.movie
   );
 

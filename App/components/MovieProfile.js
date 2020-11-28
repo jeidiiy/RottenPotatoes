@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -8,9 +8,11 @@ import {
   Dimensions,
   ImageBackground,
   StatusBar,
+  TextInput
 } from 'react-native';
 
 const MovieProfile = ({ route }) => {
+  const [text, onChangeText] = useState('리뷰를 작성하세요.');
   const {
     title,
     summary,
@@ -33,7 +35,7 @@ const MovieProfile = ({ route }) => {
           <Text style={styles.title}>
             {JSON.stringify(title).replace(/\"/g, '')}
           </Text>
-          <Text style={styles.summary} numberOfLines={5}>
+          <Text style={styles.summary} numberOfLines={5} >
             {JSON.stringify(summary).replace(/\"/g, '')}
           </Text>
           <Text style={styles.runtime}>
@@ -43,6 +45,13 @@ const MovieProfile = ({ route }) => {
             {JSON.stringify(...genres).replace(/\"/g, '')} /{' '}
             {JSON.stringify(year)}
           </Text>
+        </View>
+        <View>
+          <TextInput
+            style={styles.input}
+            onChangeText={text => onChangeText(text)}
+            value={text}
+          />
         </View>
       </ScrollView>
     </View>
@@ -83,6 +92,13 @@ const styles = StyleSheet.create({
   genres: {
     color: '#8c8c8c',
   },
+  input: {
+    flex: 1,
+    borderColor: '#ffffff',
+    backgroundColor: 'white',
+    height: 40,
+    padding: 10,
+  }
 });
 
 export default MovieProfile;
