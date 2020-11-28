@@ -15,9 +15,9 @@ import { GET_MOVIE_REQUEST, GET_MOVIE_MORE_REQUEST } from '../reducer/movie';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-const stack = createStackNavigator();
+const Stack = createStackNavigator();
 
-function Home() {
+function Home({ navigation }) {
   const { loading, movies, movieId, page, moreLoading } = useSelector(
     (state) => state.movie
   );
@@ -61,9 +61,7 @@ function Home() {
 
   return (
     <View>
-      <View style={styles.headerTitle}>
-        <Text>은지 영화 앱</Text>
-      </View>
+      <StatusBar barStyle={'default'} />
       <ScrollView
         contentContainerStyle={styles.container}
         onScroll={(e) => {
@@ -72,12 +70,16 @@ function Home() {
       >
         {movies.map((movie) => (
           <Movie
+            navigation={navigation}
             poster={movie.medium_cover_image}
+            largePoster={movie.large_cover_image}
             key={movie.id}
             id={movie.id}
             title={movie.title}
             summary={movie.summary}
             year={movie.year}
+            genres={movie.genres}
+            runtime={movie.runtime}
           />
         ))}
         {moreLoading && (
@@ -95,9 +97,6 @@ function Home() {
 }
 
 const styles = StyleSheet.create({
-  headerTitle: {
-    backgroundColor: '#ec524b',
-  },
   container: {
     backgroundColor: '#fff',
     paddingTop: Constants.statusBarHeight,
