@@ -10,7 +10,7 @@ indexRouter.get('/', (req, res) => {
 
 indexRouter.get('/movie/:id', async (req, res) => {
   await Movie.findOrCreate({
-    where: { movieId: req.params.id },
+    where: { movieid: req.params.id },
   });
 
   return res.status(200).send('ok');
