@@ -33,7 +33,7 @@ const MovieProfile = ({ route }) => {
           <Text style={styles.title}>
             {JSON.stringify(title).replace(/\"/g, '')}
           </Text>
-          <Text style={styles.summary} numberOfLines={5}>
+          <Text style={styles.summary} numberOfLines={5} >
             {JSON.stringify(summary).replace(/\"/g, '')}
           </Text>
           <Text style={styles.runtime}>
