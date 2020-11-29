@@ -8,11 +8,14 @@ import {
   Dimensions,
   ImageBackground,
   StatusBar,
-  TextInput
+  TextInput,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 const MovieProfile = ({ route }) => {
-  const [text, onChangeText] = useState('리뷰를 작성하세요.');
+  const [text, onChangeText] = useState('');
   const {
     title,
     summary,
@@ -25,7 +28,8 @@ const MovieProfile = ({ route }) => {
   return (
     <View style={styles.profile}>
       <StatusBar barStyle={'light-content'} />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
+        {/* keyboardShouldPersistTaps - 키보드 올라와 있을 때도 submit 버튼 동작하는 옵션 */}
         <Image
           style={styles.poster}
           source={{ uri: largePoster }}
@@ -35,7 +39,7 @@ const MovieProfile = ({ route }) => {
           <Text style={styles.title}>
             {JSON.stringify(title).replace(/\"/g, '')}
           </Text>
-          <Text style={styles.summary} numberOfLines={5} >
+          <Text style={styles.summary} numberOfLines={5}>
             {JSON.stringify(summary).replace(/\"/g, '')}
           </Text>
           <Text style={styles.runtime}>
@@ -46,12 +50,24 @@ const MovieProfile = ({ route }) => {
             {JSON.stringify(year)}
           </Text>
         </View>
-        <View>
-          <TextInput
-            style={styles.input}
-            onChangeText={text => onChangeText(text)}
-            value={text}
-          />
+        <View style={styles.reviewContainer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => onChangeText(text)}
+              value={text}
+              placeholder="Comment..."
+            />
+          </View>
+          <TouchableOpacity
+            style={[
+              styles.submitButton,
+              text === '' ? styles.notDisplay : styles.onDisplay,
+            ]}
+            onPress={() => Alert.alert(text)}
+          >
+            <AntDesign name="rightcircle" size={24} color="black" />
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -92,13 +108,38 @@ const styles = StyleSheet.create({
   genres: {
     color: '#8c8c8c',
   },
+  reviewContainer: {
+    flexDirection: 'row',
+    width,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 5,
+    paddingLeft: 15,
+  },
+  inputContainer: {
+    flex: 10,
+  },
   input: {
-    flex: 1,
     borderColor: '#ffffff',
     backgroundColor: 'white',
     height: 40,
-    padding: 10,
-  }
+  },
+  submitButton: {
+    flex: 2,
+    height: 40,
+    width: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+    display: 'none',
+  },
+  onDisplay: {
+    display: 'flex',
+  },
+  notDisplay: {
+    display: 'none',
+  },
 });
 
 export default MovieProfile;
