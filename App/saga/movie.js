@@ -4,6 +4,7 @@ import {
   GET_MOVIE_REQUEST, GET_MOVIE_FAILURE, GET_MOVIE_SUCCESS,
   GET_MOVIE_MORE_REQUEST, GET_MOVIE_MORE_FAILURE, GET_MOVIE_MORE_SUCCESS,
   GET_MOVIE_INFO_REQUEST, GET_MOVIE_INFO_SUCCESS, GET_MOVIE_INFO_FAILURE,
+  GET_COMMENT_REQUEST, GET_COMMENT_SUCCESS, GET_COMMENT_FAILURE,
 } from "../reducer/movie";
 import { serverHost } from '../config';
 
@@ -47,19 +48,14 @@ function *getMovieMores(action) {
 };
 
 function getMovieInfoAPI(id) {
-  function getYts() {
-    return axios(`https://yts-proxy.nomadcoders1.now.sh/movie_details.json?movie_id=${id}`);
-  }
+  const reqOptions = {
+    method: 'GET',  
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    url: `${serverHost}/movie/${id}`,
+  };
 
-  function getComments() {
-    return axios.get(`${serverHost}/movie/${id}`); 
-  }
-  return axios.all([getYts(), getComments()])
-    .then(axios.spread((acct, perms) => {
-      console.log(acct);
-      console.log(perms);
-    }));
-};
+  return axios(reqOptions);
+}
 
 function *getMovieInfo(action) {
   try {
@@ -78,6 +74,32 @@ function *getMovieInfo(action) {
   };
 }
 
+function getCommentsAPI(movieId) {
+  const reqOptions = {
+    method: 'GET',
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    url: `${serverHost}/comments/${movieId}`,
+  }
+  return axios(reqOptions);
+}
+
+function *getCommentsInfo(action) {
+  try {
+    const comments = yield call(getCommentsAPI, action.movieId);
+    yield put({
+      type: GET_COMMENT_SUCCESS,
+      comments: comments.data,
+    });
+  } catch (err) {
+    console.error('getCommentsInfoError');
+    console.error(err);
+    yield put({
+      type: GET_COMMENT_FAILURE,
+      error: err,
+    });
+  };
+}
+
 function* watchGetMovies() {
   yield throttle(3000, GET_MOVIE_REQUEST, getMovies);
 };
@@ -90,10 +112,15 @@ function* watchGetMovieInfo() {
   yield takeLatest(GET_MOVIE_INFO_REQUEST, getMovieInfo);
 }
 
+function* watchGetCommentInfo() {
+  yield takeLatest(GET_COMMENT_REQUEST, getCommentsInfo);
+}
+
 export default function* movieSaga() {
   yield all([
     fork(watchGetMovies),
     fork(watchgetMoreMovies),
     fork(watchGetMovieInfo),
+    fork(watchGetCommentInfo),
   ]);
 };

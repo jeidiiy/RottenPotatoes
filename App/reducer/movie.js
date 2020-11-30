@@ -5,8 +5,10 @@ const initialState = {
   moreLoading: false,
   movies: [],
   movieInfo: {},
-  movieId: 1,
+  commentInfo: [],
+  // movieId: 1,
   page: 1,
+
   getMovieLoading: false,
   getMovieDone: false,
   getMovieError: null,
@@ -15,9 +17,9 @@ const initialState = {
   getMovieInfoDone: false,
   getMovieInfoError: null,
 
-  commentLoading: false,
-  commentSuccess: false,
-  commentError: null,
+  getCommentLoading: false,
+  getCommentSuccess: false,
+  getCommentError: null,
 }
 
 export const GET_MOVIE_REQUEST = 'GET_MOVIE_REQUEST';
@@ -32,9 +34,13 @@ export const GET_MOVIE_INFO_REQUEST = 'GET_MOVIE_INFO_REQUEST';
 export const GET_MOVIE_INFO_SUCCESS = 'GET_MOVIE_INFO_SUCCESS';
 export const GET_MOVIE_INFO_FAILURE = 'GET_MOVIE_INFO_FAILURE';
 
-export const WRITE_COMMENT_REQUEST = 'WRITE_COMMENT_REQUEST';
-export const WRITE_COMMENT_SUCCESS = 'WRITE_COMMENT_SUCCESS';
-export const WRITE_COMMENT_FAILURE = 'WRITE_COMMENT_FAILURE';
+export const GET_COMMENT_REQUEST = 'GET_COMMENT_REQUEST';
+export const GET_COMMENT_SUCCESS = 'GET_COMMENT_SUCCESS';
+export const GET_COMMENT_FAILURE = 'GET_COMMENT_FAILURE';
+
+export const POST_COMMENT_REQUEST = 'POST_COMMENT_REQUEST';
+export const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
+export const POST_COMMENT_FAILURE = 'POST_COMMENT_FAILURE';
 
 const movieReducer = handleActions(
   {
@@ -100,25 +106,51 @@ const movieReducer = handleActions(
         getMovieInfoLoading: true,
         getMovieInfoError: null,
         getMovieInfoDone: false,
-      }
+      };
     },
-    [GET_MOVIE_INFO_SUCCESS]: (state, { movie }) => {
+    [GET_MOVIE_INFO_SUCCESS]: state => {
       return {
         ...state,
         getMovieInfoLoading: false,
         getMovieInfoError: null,
         getMovieInfoDone: true,
-        movieInfo: movie,
-      }
+      };
     },
-    [GET_MOVIE_INFO_FAILURE]: (state, dispatch) => {
+    [GET_MOVIE_INFO_FAILURE]: (state, { getMovieInfoError }) => {
       return {
         ...state,
         getMovieInfoLoading: false,
-        getMovieInfoError: null,
+        getMovieInfoError,
         getMovieInfoDone: false,
-      }
+      };
     },
+    [GET_COMMENT_REQUEST]: (state) => {
+      console.log('GET_COMMENT_REQUEST');
+      return {
+        ...state,
+        getCommentLoading: true,
+        getCommentError: null,
+        getCommentSuccess: false,
+      };
+    },
+    [GET_COMMENT_SUCCESS]: (state, { comments: commentInfo }) => {
+      console.log('GET_COMMENT_SUCCESS');
+      return {
+        ...state,
+        getCommentLoading: false,
+        getCommentSuccess: false,
+        commentInfo,
+      };
+    },
+    [GET_COMMENT_FAILURE]: (state, { commentError }) => {
+      console.log('GET_COMMENT_FAILURE');
+      return {
+        ...state,
+        getCommentLoading: false,
+        getCommentError,
+        getCommentSuccess: false,
+      };
+    }
   },
   initialState
 );
