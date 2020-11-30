@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -13,9 +13,13 @@ import {
   Alert,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { GET_COMMENT_REQUEST } from '../reducer/movie';
 
 const MovieProfile = ({ route }) => {
   const [text, onChangeText] = useState('');
+  const { commentInfo, getCommentLoading } = useSelector(state => state.movie);
+  const dispatch = useDispatch();
   const {
     title,
     summary,
@@ -24,7 +28,15 @@ const MovieProfile = ({ route }) => {
     largePoster,
     genres,
     runtime,
+    id,
   } = route.params;
+
+  useEffect(() => {
+    dispatch({
+      type: GET_COMMENT_REQUEST, 
+      movieId: id,
+    });
+  }, []);
   return (
     <View style={styles.profile}>
       <StatusBar barStyle={'light-content'} />
@@ -69,6 +81,19 @@ const MovieProfile = ({ route }) => {
             <AntDesign name="rightcircle" size={24} color="black" />
           </TouchableOpacity>
         </View>
+      </ScrollView>
+      <ScrollView>
+        { getCommentLoading && 
+        <Text>로딩중입니다.</Text>}
+        { !getCommentLoading &&
+          commentInfo.map((v, i) =>
+           (
+             <View>
+               <Text style={styles.comment} >{v.userid}</Text>
+               <Text key={i} style={styles.comment} >{v.content}</Text>
+             </View>
+          ))
+        }
       </ScrollView>
     </View>
   );
@@ -140,6 +165,12 @@ const styles = StyleSheet.create({
   notDisplay: {
     display: 'none',
   },
+  comment: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
+    color: 'white',
+  }
 });
 
 export default MovieProfile;

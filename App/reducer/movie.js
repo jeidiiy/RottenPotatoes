@@ -5,6 +5,7 @@ const initialState = {
   moreLoading: false,
   movies: [],
   movieInfo: {},
+  commentInfo: [],
   // movieId: 1,
   page: 1,
 
@@ -16,9 +17,9 @@ const initialState = {
   getMovieInfoDone: false,
   getMovieInfoError: null,
 
-  commentLoading: false,
-  commentSuccess: false,
-  commentError: null,
+  getCommentLoading: false,
+  getCommentSuccess: false,
+  getCommentError: null,
 }
 
 export const GET_MOVIE_REQUEST = 'GET_MOVIE_REQUEST';
@@ -32,6 +33,10 @@ export const GET_MOVIE_MORE_FAILURE = 'GET_MOVIE_MORE_FAILURE';
 export const GET_MOVIE_INFO_REQUEST = 'GET_MOVIE_INFO_REQUEST';
 export const GET_MOVIE_INFO_SUCCESS = 'GET_MOVIE_INFO_SUCCESS';
 export const GET_MOVIE_INFO_FAILURE = 'GET_MOVIE_INFO_FAILURE';
+
+export const GET_COMMENT_REQUEST = 'GET_COMMENT_REQUEST';
+export const GET_COMMENT_SUCCESS = 'GET_COMMENT_SUCCESS';
+export const GET_COMMENT_FAILURE = 'GET_COMMENT_FAILURE';
 
 export const POST_COMMENT_REQUEST = 'POST_COMMENT_REQUEST';
 export const POST_COMMENT_SUCCESS = 'POST_COMMENT_SUCCESS';
@@ -119,27 +124,31 @@ const movieReducer = handleActions(
         getMovieInfoDone: false,
       };
     },
-    [POST_COMMENT_REQUEST]: (state) => {
+    [GET_COMMENT_REQUEST]: (state) => {
+      console.log('GET_COMMENT_REQUEST');
       return {
         ...state,
-        commentLoading: true,
-        commentError: null,
-        commentSuccess: false,
+        getCommentLoading: true,
+        getCommentError: null,
+        getCommentSuccess: false,
       };
     },
-    [POST_COMMENT_SUCCESS]: (state) => {
+    [GET_COMMENT_SUCCESS]: (state, { comments: commentInfo }) => {
+      console.log('GET_COMMENT_SUCCESS');
       return {
         ...state,
-        commentLoading: false,
-        commentSuccess: false,
+        getCommentLoading: false,
+        getCommentSuccess: false,
+        commentInfo,
       };
     },
-    [POST_COMMENT_FAILURE]: (state, { commentError }) => {
+    [GET_COMMENT_FAILURE]: (state, { commentError }) => {
+      console.log('GET_COMMENT_FAILURE');
       return {
         ...state,
-        commentLoading: false,
-        commentError,
-        commentSuccess: false,
+        getCommentLoading: false,
+        getCommentError,
+        getCommentSuccess: false,
       };
     }
   },
