@@ -47,9 +47,19 @@ function *getMovieMores(action) {
 };
 
 function getMovieInfoAPI(id) {
-  const ytsMovie = axios(`https://yts-proxy.nomadcoders1.now.sh/movie_details.json?movie_id=${id}`);
-  return axios(`${serverHost}/movie/${id}`);
-}
+  function getYts() {
+    return axios(`https://yts-proxy.nomadcoders1.now.sh/movie_details.json?movie_id=${id}`);
+  }
+
+  function getComments() {
+    return axios.get(`${serverHost}/movie/${id}`); 
+  }
+  return axios.all([getYts(), getComments()])
+    .then(axios.spread((acct, perms) => {
+      console.log(acct);
+      console.log(perms);
+    }));
+};
 
 function *getMovieInfo(action) {
   try {

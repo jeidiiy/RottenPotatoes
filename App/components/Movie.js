@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Proptypes from 'prop-types';
 import MovieProfile from './MovieProfile';
@@ -7,11 +7,12 @@ const dimensions = Dimensions.get('window');
 const imageHeight = Math.round((dimensions.width * 13) / 16);
 const imageWidth = dimensions.width / 2;
 
-export default function Movie({ navigation, title, summary, year, poster }) {
+export default function Movie({ navigation, title, summary, year, poster, id }) {
+
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('MovieProfile', { title, summary, year, poster });
+        navigation.navigate('MovieProfile', { title, summary, year, poster, id });
       }}
     >
       <Image style={styles.poster} source={{ uri: poster }} />
