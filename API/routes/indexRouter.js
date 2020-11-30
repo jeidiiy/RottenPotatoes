@@ -22,13 +22,10 @@ indexRouter.get('/comments/:id', async (req, res, next) => {
       where: { MovieMovieId: req.params.id }
     });
 
-    console.log(comments);
     return res.status(203).json(comments);
   } catch (err) {
     console.error(err);
     next(err);
   };
 }); 
-
-
 export default indexRouter;
