@@ -10,12 +10,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import Movie from './Movie';
-import MovieProfile from './MovieProfile';
 import { GET_MOVIE_REQUEST, GET_MOVIE_MORE_REQUEST } from '../reducer/movie';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
-const Stack = createStackNavigator();
 
 function Home({ navigation }) {
   const { loading, movies, page, moreLoading } = useSelector(
@@ -35,7 +31,7 @@ function Home({ navigation }) {
     (e) => {
       if (
         e.nativeEvent.contentSize.height - e.nativeEvent.contentOffset.y <
-        950
+        900
       ) {
         dispatch({
           type: GET_MOVIE_MORE_REQUEST,
