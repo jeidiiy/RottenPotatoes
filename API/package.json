@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.5",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
@@ -17,9 +18,11 @@
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "@babel/node": "^7.12.6",
-    "@babel/preset-env": "^7.12.1"
+    "@babel/preset-env": "^7.12.1",
+    "pm2": "^4.5.0"
   },
   "scripts": {
-    "dev:server": "nodemon --exec babel-node ./"
+    "dev:server": "nodemon --exec babel-node ./",
+    "build:server": "cross-env NODE_ENV=production pm2 start ./ --interpreter node_modules/@babel/node/bin/babel-node.js"
   }
 }
