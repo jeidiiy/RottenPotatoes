@@ -22,6 +22,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', indexRouter);
 
-app.listen(app.get('port'), '192.168.0.3', () => {
+app.listen(app.get('port'), app.get('host'), () => {
   console.log(`http:${app.get('host')} 에서 서버 실행 중..`);
 });

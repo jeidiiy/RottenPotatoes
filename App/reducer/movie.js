@@ -1,4 +1,5 @@
-import { handleActions, createActions } from 'redux-actions';
+import { handleActions } from 'redux-actions';
+
 
 const initialState = {
   loading: false,
@@ -20,6 +21,10 @@ const initialState = {
   getCommentLoading: false,
   getCommentSuccess: false,
   getCommentError: null,
+
+  postCommentLoading: false,
+  postCommentSuccess: false,
+  postCommentError: null,
 }
 
 export const GET_MOVIE_REQUEST = 'GET_MOVIE_REQUEST';
@@ -150,7 +155,34 @@ const movieReducer = handleActions(
         getCommentError,
         getCommentSuccess: false,
       };
-    }
+    },
+    [POST_COMMENT_REQUEST]: (state) => {
+      console.log('POST_COMMENT_REQUEST');
+      return {
+        ...state,
+        postCommentLoading: true,
+        postCommentError: null,
+        postCommentSuccess: false,
+      };
+    },
+    [POST_COMMENT_SUCCESS]: (state, { comments }) => {
+      console.log('POST_COMMENT_SUCCESS');
+      return {
+        ...state,
+        postCommentLoading: false,
+        postCommentSuccess: false,
+        commentInfo: comments.commentInfo.concat(comments),
+      };
+    },
+    [POST_COMMENT_FAILURE]: (state, { error: postCommentError }) => {
+      console.log('POST_COMMENT_FAILURE');
+      return {
+        ...state,
+        postCommentLoading: false,
+        postCommentError,
+        postCommentSuccess: false,
+      };
+    },
   },
   initialState
 );
