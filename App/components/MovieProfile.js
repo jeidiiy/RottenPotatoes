@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useCallback, useEffect, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  ImageBackground,
   StatusBar,
   TextInput,
   TouchableOpacity,
@@ -14,11 +13,12 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_COMMENT_REQUEST } from '../reducer/movie';
+import { GET_COMMENT_REQUEST, GET_MOVIE_FAILURE, POST_COMMENT_REQUEST } from '../reducer/movie';
+
 
 const MovieProfile = ({ route }) => {
   const [text, onChangeText] = useState('');
-  const { commentInfo, getCommentLoading } = useSelector(state => state.movie);
+  const { commentInfo, getCommentLoading, postCommentLoading } = useSelector(state => state.movie);
   const dispatch = useDispatch();
   const {
     title,
@@ -36,11 +36,27 @@ const MovieProfile = ({ route }) => {
       type: GET_COMMENT_REQUEST, 
       movieId: id,
     });
+  }, [postCommentLoading]);
+    
+  const commitComment = useCallback(data => {
+    dispatch({
+      type: POST_COMMENT_REQUEST,
+      data: { comment: data, movieId: id }
+    });
+    onChangeText('');
   }, []);
+
+  useEffect(() => {
+    dispatch({
+      type: GET_COMMENT_REQUEST, 
+      movieId: id,
+    });
+  }, []);
+
   return (
     <View style={styles.profile}>
       <StatusBar barStyle={'light-content'} />
-      <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
+      <View style={styles.scrollView} keyboardShouldPersistTaps="handled">
         {/* keyboardShouldPersistTaps - 키보드 올라와 있을 때도 submit 버튼 동작하는 옵션 */}
         <Image
           style={styles.poster}
@@ -76,23 +92,25 @@ const MovieProfile = ({ route }) => {
               styles.submitButton,
               text === '' ? styles.notDisplay : styles.onDisplay,
             ]}
-            onPress={() => Alert.alert(text)}
+            onPress={() => commitComment(text)}
           >
             <AntDesign name="rightcircle" size={24} color="black" />
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </View>
       <ScrollView>
         { getCommentLoading && 
-        <Text>로딩중입니다.</Text>}
-        { !getCommentLoading &&
+         <Text style={{ color: 'white' }}>로딩중입니다.</Text>
+        }
+        { commentInfo ?
           commentInfo.map((v, i) =>
-           (
-             <View>
-               <Text style={styles.comment} >{v.userid}</Text>
-               <Text key={i} style={styles.comment} >{v.content}</Text>
-             </View>
-          ))
+          (
+            <View>
+              <Text style={styles.commentUser} >{v.userid}</Text>
+              <Text key={i} style={styles.comment} >{v.content}</Text>
+            </View>
+         ))
+        : <Text>잠시만 기다려주세요.</Text>
         }
       </ScrollView>
     </View>
@@ -102,6 +120,10 @@ const MovieProfile = ({ route }) => {
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  scrollView: {
+    marginBottom: 30,
+    borderBottomColor: 'white',
+  },
   profile: {
     flex: 1,
     justifyContent: 'center',
@@ -110,7 +132,7 @@ const styles = StyleSheet.create({
   },
   poster: {
     width,
-    height: 400,
+    height: 300,
   },
   info: {
     padding: 20,
@@ -143,7 +165,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   inputContainer: {
-    flex: 10,
+    flex: 30,
   },
   input: {
     borderColor: '#ffffff',
@@ -157,6 +179,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,
+    marginRight: 10,
     display: 'none',
   },
   onDisplay: {
@@ -165,11 +188,19 @@ const styles = StyleSheet.create({
   notDisplay: {
     display: 'none',
   },
-  comment: {
+  commentParent: {
     flex: 1,
-    justifyContent: 'flex-start',
     flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  commentUser: {
+    alignItems: 'flex-start',
     color: 'white',
+  },
+  comment: {
+    marginRight: 350,
+    color: '#a9a9a9',
+    marginBottom: 5,
   }
 });
 
